@@ -9,16 +9,12 @@ export const site = {
   tagline: 'Capturando la fe, el sentimiento y la tradición',
   hero: ph(900, 1920, 1080), // Portada de inicio. Cambia por una URL o 'sb:portada/inicio.jpg'
 
-  // Datos de contacto [EJEMPLO]
+  // Datos de contacto que se muestran en la página [EJEMPLO]. Son solo texto visible:
+  // el correo donde RECIBES los avisos del formulario se configura en Supabase (ver README), no aquí.
   contactIntro: '[EJEMPLO] ¿Quieres consultar un reportaje, encargar una cobertura o colaborar con tu hermandad? Escríbeme.',
   email: 'correo@ejemplo.com',
   phone: '+34 000 000 000',
   location: 'Andalucía',
-
-  // Para que el formulario envíe mensajes de verdad, pega aquí la URL de un servicio
-  // como Formspree (https://formspree.io): 'https://formspree.io/f/xxxxxxx'
-  // Mientras esté vacío, el formulario avisa de que NO envía nada.
-  contactEndpoint: '',
 };
 
 export const photographer = {
@@ -43,6 +39,8 @@ export const social = [
 ];
 
 // Fotografías destacadas de la portada. 'gallery' es el id de la galería a la que enlaza.
+// 'caption' es el TEXTO ALTERNATIVO de la imagen (lo leen Google y los lectores de pantalla):
+// descríbela con claridad, p. ej. 'Paso de misterio saliendo de la iglesia al atardecer'.
 export const featured = [
   { src: ph(101, 800, 1100), gallery: 'semana-santa-2026', caption: 'Destacada 1 (DEMO)' },
   { src: ph(102, 800, 1100), gallery: 'semana-santa-2026', caption: 'Destacada 2 (DEMO)' },
