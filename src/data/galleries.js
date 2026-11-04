@@ -14,9 +14,10 @@
 //   description  Texto breve del reportaje
 //   cover        Portada (URL completa, 'sb:ruta/en/supabase.jpg' o ph(n) de demostración)
 //   images       Lista de fotografías (mismos formatos que cover)
-//   folder       OPCIONAL. Carpeta de Supabase, p. ej. '2026/semana-santa'. Si Supabase está
+//   folder       OPCIONAL. Carpeta de Supabase, p. ej. '2026/semana_santa'. Si Supabase está
 //                conectado, las fotos se leen automáticamente de esa carpeta y ya no hace
 //                falta listarlas en "images" (si la carpeta está vacía se usa "images").
+//                El nombre debe coincidir EXACTAMENTE con la carpeta del bucket.
 import { ph, demo } from '../media.js';
 
 export const galleries = [
@@ -28,8 +29,8 @@ export const galleries = [
     location: 'Jerez de la Frontera',
     date: '2026-04-01',
     description: '[DEMO] Descripción de ejemplo del reportaje. Sustitúyela por tu texto.',
-    cover: ph(1),
-    // folder: '2026/semana-santa',
+    cover: ph(1), // Cuando subas fotos, cámbiala por 'sb:2026/semana_santa/nombre-de-tu-foto.jpg'
+    folder: '2026/semana_santa', // Carpeta real creada en Supabase Storage
     images: demo(1, 12),
   },
   {
