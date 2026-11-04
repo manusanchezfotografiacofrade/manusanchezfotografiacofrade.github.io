@@ -29,7 +29,7 @@ export const galleries = [
     location: 'Jerez de la Frontera',
     date: '2026-04-01',
     description: '[DEMO] Descripción de ejemplo del reportaje. Sustitúyela por tu texto.',
-    cover: ph(1), // Cuando subas fotos, cámbiala por 'sb:2026/semana_santa/nombre-de-tu-foto.jpg'
+    cover: 'sb:2026/semana_santa/tu-foto.jpg', // Foto de Supabase Storage
     folder: '2026/semana_santa', // Carpeta real creada en Supabase Storage
     images: demo(1, 12),
   },
