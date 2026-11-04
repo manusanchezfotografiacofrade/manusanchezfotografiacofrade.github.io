@@ -1,0 +1,24 @@
+# Mapa del sitio en formato YAML (referencia legible para humanos y herramientas propias).
+# IMPORTANTE: Google Search Console NO lee YAML. Para Google se usa sitemap.xml (ya publicado en la raíz).
+# Si añades páginas, actualiza también sitemap.xml.
+
+site: https://manusanchezfotografiacofrade.github.io/
+lastmod: 2026-11-04
+
+urls:
+  - loc: https://manusanchezfotografiacofrade.github.io/
+    lastmod: 2026-11-04
+    changefreq: weekly
+    priority: 1.0
+
+# Secciones de la web. Usan rutas con "#", que Google trata como la misma página que la portada,
+# por eso NO están en sitemap.xml. Se listan aquí solo como referencia de navegación.
+sections:
+  - name: Galerías
+    path: /#/galerias
+  - name: Galería (ejemplo, el id cambia según cada reportaje)
+    path: /#/galeria/semana-santa-2026
+  - name: Sobre mí
+    path: /#/sobre-mi
+  - name: Contacto
+    path: /#/contacto
