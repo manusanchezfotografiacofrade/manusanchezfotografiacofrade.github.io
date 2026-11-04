@@ -23,7 +23,7 @@ export const site = {
 
 export const photographer = {
   name: 'Manu Sánchez',
-  photo: ph(300, 800, 1000, 'FOTO DE PERFIL (DEMO)'),
+  photo: 'sb:2026/semana_santa/tu-foto.jpg', // Foto de perfil (Supabase Storage)
   intro: '[EJEMPLO] Presentación breve del fotógrafo. Sustitúyela por tu propio texto: quién eres y qué te mueve a fotografiar el mundo cofrade.',
   passion: '[EJEMPLO] Aquí cuentas tu pasión por la Semana Santa: cómo la vives, qué te emociona y por qué la fotografías.',
   vision: '[EJEMPLO] Aquí explicas tu forma de entender la fotografía cofrade: qué buscas en una imagen, la luz, los gestos, el silencio.',
