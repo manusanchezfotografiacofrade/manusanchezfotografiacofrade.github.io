@@ -35,11 +35,11 @@ export const photographer = {
   ],
 };
 
-// Redes sociales. Añade las que quieras copiando una línea. [ENLACES DE EJEMPLO]
+// Redes sociales. Cada línea es un botón: copia una línea para añadir otra red.
 export const social = [
-  { name: 'Instagram', url: 'https://www.instagram.com/usuario-ejemplo' },
-  { name: 'Facebook', url: 'https://www.facebook.com/usuario-ejemplo' },
-  // { name: 'YouTube', url: 'https://www.youtube.com/@usuario-ejemplo' },
+  { name: 'Instagram', url: 'https://www.instagram.com/fotografiamanu_/' },
+  // { name: 'Facebook', url: 'https://www.facebook.com/tu-usuario' },
+  // { name: 'YouTube', url: 'https://www.youtube.com/@tu-usuario' },
 ];
 
 // Fotografías destacadas de la portada. 'gallery' es el id de la galería a la que enlaza.
