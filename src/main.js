@@ -14,7 +14,11 @@ const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const year = (g) => String(g.date).slice(0, 4);
-const fmt = (d) => new Date(`${d}T12:00:00`).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+// La fecha puede ser 'AAAA-MM-DD' (se muestra completa) o solo el año 'AAAA' si no se conoce el día.
+const fmt = (d) =>
+  /^\d{4}$/.test(String(d))
+    ? String(d)
+    : new Date(`${d}T12:00:00`).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 const byDate = [...galleries].sort((a, b) => b.date.localeCompare(a.date));
 const app = $('#app');
 
