@@ -1,7 +1,7 @@
 // ============================================================
 // GALERÍAS  —  AQUÍ AÑADES Y EDITAS TUS REPORTAJES
 // ============================================================
-// Para añadir una galería: copia el bloque { ... }, cambia los datos y pégalo en la lista.
+// Para añadir una galería: copia un bloque { ... }, cambia los datos y pégalo en la lista.
 //
 // Campos:
 //   id           Identificador único, sin espacios ni tildes (aparece en la URL: #/galeria/mi-id)
@@ -18,6 +18,18 @@
 //                falta listarlas en "images". El nombre debe coincidir EXACTAMENTE con la carpeta del bucket.
 
 export const galleries = [
+  {
+    id: 'veneracion-viacrucis-2026',
+    title: 'Veneración Nuestro Padre Jesús de la Via-Crucis',
+    event: 'Besamanos',
+    brotherhood: 'Hermandad de las Cinco Llagas',
+    location: 'Jerez de la Frontera', // Confirma o cambia la localidad
+    date: '2026', // Pon 'AAAA-MM-DD' cuando quieras mostrar el día exacto
+    description: 'Reportaje fotográfico de la veneración de Nuestro Padre Jesús de la Via-Crucis, de la Hermandad de las Cinco Llagas, 2026.',
+    cover: 'sb:2026/besamanos/veneracion-viacrucis/IMG_1632.jpg', // Cambia por la foto que prefieras como portada
+    folder: '2026/besamanos/veneracion-viacrucis', // Las fotos se leen solas de esta carpeta de Supabase
+    images: [],
+  },
   {
     id: 'besamanos-candelaria-jerez-2026',
     title: 'Besamanos María Santísima de la Candelaria',
