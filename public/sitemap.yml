@@ -3,11 +3,11 @@
 # Si añades páginas, actualiza también sitemap.xml.
 
 site: https://manusanchezfotografiacofrade.github.io/
-lastmod: 2026-11-04
+lastmod: 2026-11-05
 
 urls:
   - loc: https://manusanchezfotografiacofrade.github.io/
-    lastmod: 2026-11-04
+    lastmod: 2026-11-05
     changefreq: weekly
     priority: 1.0
 
@@ -16,8 +16,8 @@ urls:
 sections:
   - name: Galerías
     path: /#/galerias
-  - name: Galería (ejemplo, el id cambia según cada reportaje)
-    path: /#/galeria/semana-santa-2026
+  - name: Besamanos María Santísima de la Candelaria
+    path: /#/galeria/besamanos-candelaria-jerez-2026
   - name: Sobre mí
     path: /#/sobre-mi
   - name: Contacto
