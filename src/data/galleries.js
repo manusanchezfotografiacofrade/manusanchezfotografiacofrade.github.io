@@ -23,7 +23,7 @@ import { ph, demo } from '../media.js';
 export const galleries = [
   {
     id: 'besamanos-candelaria-jerez-2026',
-    title: 'Besamanos de la Candelaria 2026',
+    title: 'Besamanos María Santísima de la Candelaria',
     event: 'Besamanos',
     brotherhood: 'Hermandad de la Candelaria',
     location: 'Jerez de la Frontera',
