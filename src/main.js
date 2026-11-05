@@ -176,13 +176,22 @@ const SPINNER =
   '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:-2px;margin-right:.6rem"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="42 20"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.9s" repeatCount="indefinite"/></circle></svg>';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+// Enlace de Instagram para la página de contacto (se toma de la lista "social" de site.js)
+const ig = social.find((s) => s.name === 'Instagram');
+const igUser = ig ? `@${ig.url.replace(/\/+$/, '').split('/').pop()}` : '';
+const LINK = 'style="color:var(--ink);border-bottom:1px solid var(--gold)"';
+
 const contactView = () => ({
   title: 'Contacto',
   desc: 'Contacta con Manu Sánchez Fotografía Cofrade para reportajes, coberturas y colaboraciones.',
   html: `
   <section class="pg"><div class="wrap two top">
     <div class="rv"><p class="eyebrow">Contacto</p><h1 class="h2">Hablemos</h1><p>${esc(site.contactIntro)}</p>
-      <ul class="info"><li>${esc(site.email)}</li><li>${esc(site.phone)}</li><li>${esc(site.location)}</li></ul>${socials()}</div>
+      <ul class="info">
+        <li>Correo: <a href="mailto:${esc(site.email)}" ${LINK}>${esc(site.email)}</a></li>
+        ${ig ? `<li>Instagram: <a href="${esc(ig.url)}" target="_blank" rel="noopener noreferrer" ${LINK}>${esc(igUser)}</a></li>` : ''}
+        ${site.location ? `<li>${esc(site.location)}</li>` : ''}
+      </ul>${socials()}</div>
     <form id="f" class="form rv" novalidate>
       <label>Nombre<input name="name" required minlength="2" maxlength="100" autocomplete="name"></label>
       <label>Correo electrónico<input name="email" type="email" required maxlength="254" autocomplete="email"></label>
@@ -338,7 +347,7 @@ function reveal() {
   document.querySelectorAll('.rv:not(.in)').forEach((el) => io.observe(el));
 }
 
-// ---------- Estructura común y rutas (#/galerias, #/galeria/id, #/sobre-mi, #/contacto) ----------
+// ---------- Estructura común y rutas (#/galerias, #/galeria/id, #/sobre-mi, #/contacto, #/admin) ----------
 const NAV = [['', 'Inicio'], ['galerias', 'Galerías'], ['sobre-mi', 'Sobre mí'], ['contacto', 'Contacto']];
 
 function layout() {
@@ -365,10 +374,7 @@ function layout() {
 
 const ROUTES = { __proto__: null, galerias: galleriesView, 'sobre-mi': aboutView, contacto: contactView };
 
-function route() {
-  if (lb?.classList.contains('on')) closeLb();
-  const [name = '', arg = ''] = location.hash.slice(2).split('/');
-  const v = (name === 'galeria' ? () => galleryView(arg) : ROUTES[name] || homeView)();
+function render(v, name) {
   app.innerHTML = v.html;
   v.init?.();
   document.title = v.title === site.name ? site.name : `${v.title} · ${site.name}`;
@@ -379,6 +385,27 @@ function route() {
   $('.burger').setAttribute('aria-expanded', 'false');
   window.scrollTo(0, 0);
   reveal();
+}
+
+function route() {
+  if (lb?.classList.contains('on')) closeLb();
+  const [name = '', arg = ''] = location.hash.slice(2).split('/');
+  let robots = $('meta[name=robots]');
+
+  // Panel privado: se carga aparte (solo si alguien entra en #/admin) y se marca como no indexable.
+  if (name === 'admin') {
+    if (!robots) { robots = document.createElement('meta'); robots.name = 'robots'; document.head.append(robots); }
+    robots.content = 'noindex,nofollow';
+    app.innerHTML = '<section class="pg"><div class="wrap"><p class="meta">Cargando…</p></div></section>';
+    import('./admin.js')
+      .then((m) => { if (location.hash.startsWith('#/admin')) render(m.adminView(), name); })
+      .catch(() => { app.innerHTML = '<section class="pg"><div class="wrap"><p class="meta">No se pudo cargar el panel. Recarga la página.</p></div></section>'; });
+    return;
+  }
+
+  robots?.remove();
+  const v = (name === 'galeria' ? () => galleryView(arg) : ROUTES[name] || homeView)();
+  render(v, name);
 }
 
 // Si Supabase está conectado, las galerías con "folder" leen sus fotos de esa carpeta.
@@ -404,4 +431,5 @@ document.addEventListener('error', (e) => {
 layout();
 route();
 addEventListener('hashchange', route);
-hydrate().then(() => supabaseOn && route());
+// Al terminar de cargar las fotos de Supabase se repinta la página (salvo en el panel, para no borrar lo que estés haciendo).
+hydrate().then(() => { if (supabaseOn && !location.hash.startsWith('#/admin')) route(); });
