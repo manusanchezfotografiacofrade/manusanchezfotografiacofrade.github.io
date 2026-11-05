@@ -10,7 +10,7 @@
 //   event        Tipo: 'Semana Santa', 'Besamanos', 'Cultos', 'Procesión'... (sirve de filtro)
 //   brotherhood  Hermandad o cofradía
 //   location     Localidad
-//   date         Fecha en formato AAAA-MM-DD (el año se calcula solo)
+//   date         Fecha 'AAAA-MM-DD'. Si no sabes el día, pon solo el año: 'AAAA' (se mostrará solo el año)
 //   description  Texto breve del reportaje
 //   cover        Portada (URL completa, 'sb:ruta/en/supabase.jpg' o ph(n) de demostración)
 //   images       Lista de fotografías (mismos formatos que cover)
@@ -21,6 +21,18 @@
 import { ph, demo } from '../media.js';
 
 export const galleries = [
+  {
+    id: 'besamanos-candelaria-jerez-2026',
+    title: 'Besamanos de la Candelaria 2026',
+    event: 'Besamanos',
+    brotherhood: 'Hermandad de la Candelaria',
+    location: 'Jerez de la Frontera',
+    date: '2026', // Pon 'AAAA-MM-DD' cuando quieras mostrar el día exacto
+    description: 'Reportaje fotográfico del besamanos de la Hermandad de la Candelaria en Jerez de la Frontera, 2026.',
+    cover: 'sb:2026/besamanos/besamanos-candelaria-jerez/IMG_1685.jpg', // Cambia por la foto que prefieras como portada
+    folder: '2026/besamanos/besamanos-candelaria-jerez', // Las fotos se leen solas de esta carpeta de Supabase
+    images: [],
+  },
   {
     id: 'semana-santa-2026',
     title: 'Semana Santa 2026 (DEMO)',
