@@ -16,7 +16,7 @@ export const site = {
   // El enlace de Instagram se toma de la lista "social" de más abajo.
   contactIntro: 'Si quieres consultar un reportaje, encargar una cobertura o colaborar con tu hermandad, escríbeme con el formulario, por correo electrónico o a través de Instagram.',
   email: 'fotografiamanu515@gmail.com',
-  location: 'Andalucía',
+  location: 'Jerez de la Frontera',
 };
 
 export const photographer = {
