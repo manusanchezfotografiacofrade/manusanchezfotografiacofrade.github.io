@@ -11,11 +11,11 @@ export const site = {
   // pon una ruta de Supabase, p. ej. 'sb:portada/inicio.jpg' (recomendado: unos 2000 px de ancho y menos de 500 KB).
   hero: ph(900, 1920, 1080, ''),
 
-  // Datos de contacto que se muestran en la página [EJEMPLO]. Son solo texto visible:
-  // el correo donde RECIBES los avisos del formulario se configura en Supabase (ver README), no aquí.
-  contactIntro: '[EJEMPLO] ¿Quieres consultar un reportaje, encargar una cobertura o colaborar con tu hermandad? Escríbeme.',
-  email: 'correo@ejemplo.com',
-  phone: '+34 000 000 000',
+  // Datos que se muestran en la página de Contacto. Son solo texto visible: el correo donde RECIBES
+  // los avisos del formulario se configura en Supabase (secreto CONTACT_TO_EMAIL, ver README), no aquí.
+  // El enlace de Instagram se toma de la lista "social" de más abajo.
+  contactIntro: 'Si quieres consultar un reportaje, encargar una cobertura o colaborar con tu hermandad, escríbeme con el formulario, por correo electrónico o a través de Instagram.',
+  email: 'fotografiamanu515@gmail.com',
   location: 'Andalucía',
 };
 
