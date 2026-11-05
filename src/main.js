@@ -63,9 +63,13 @@ const homeView = () => ({
       <p>${esc(photographer.intro)}</p><p style="margin-top:1.8rem"><a class="btn" href="#/sobre-mi">Conocer más</a></p></div>
     <div class="portrait rv">${pic(photographer.photo, `Retrato de ${photographer.name}, fotógrafo cofrade`, 800)}</div>
   </div></section>
-  <section class="sec alt"><div class="wrap"><p class="eyebrow">Selección</p><h2 class="h2">Fotografías destacadas</h2>
+  ${
+    featured.length
+      ? `<section class="sec alt"><div class="wrap"><p class="eyebrow">Selección</p><h2 class="h2">Fotografías destacadas</h2>
     <div class="feat">${featured.map((f) => `<a class="rv" href="#/galeria/${esc(f.gallery)}">${pic(f.src, f.caption, 700)}</a>`).join('')}</div>
-  </div></section>
+  </div></section>`
+      : ''
+  }
   <section class="sec"><div class="wrap"><p class="eyebrow">Reportajes</p><h2 class="h2">Últimas galerías</h2>
     <div class="grid">${byDate.slice(0, 3).map(card).join('')}</div>
   </div></section>
