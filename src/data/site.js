@@ -1,13 +1,15 @@
 // ============================================================
 // DATOS DEL SITIO: contacto, fotógrafo, redes y destacadas
 // ============================================================
-// Todo lo marcado como [EJEMPLO] o (DEMO) es provisional: sustitúyelo por tus datos reales.
+// Todo lo marcado como [EJEMPLO] es provisional: sustitúyelo por tus datos reales.
 import { ph } from '../media.js';
 
 export const site = {
   name: 'Manu Sánchez Fotografía Cofrade',
   tagline: 'Capturando la fe, el sentimiento y la tradición',
-  hero: ph(900, 1920, 1080), // Portada de inicio. Cambia por una URL o 'sb:portada/inicio.jpg'
+  // Imagen de la portada de inicio. Ahora es un fondo oscuro liso. Para poner una fotografía tuya
+  // pon una ruta de Supabase, p. ej. 'sb:portada/inicio.jpg' (recomendado: unos 2000 px de ancho y menos de 500 KB).
+  hero: ph(900, 1920, 1080, ''),
 
   // Datos de contacto que se muestran en la página [EJEMPLO]. Son solo texto visible:
   // el correo donde RECIBES los avisos del formulario se configura en Supabase (ver README), no aquí.
@@ -38,12 +40,11 @@ export const social = [
   // { name: 'YouTube', url: 'https://www.youtube.com/@tu-usuario' },
 ];
 
-// Fotografías destacadas de la portada. 'gallery' es el id de la galería a la que enlaza.
-// 'caption' es el TEXTO ALTERNATIVO de la imagen (lo leen Google y los lectores de pantalla):
-// descríbela con claridad, p. ej. 'Paso de misterio saliendo de la iglesia al atardecer'.
+// Fotografías destacadas de la portada. Mientras la lista esté vacía, la sección NO se muestra.
+// Para añadir una, quita las // y cambia los datos:
+//   src      Ruta de Supabase ('sb:...') o URL de la foto (recomendado: unos 2000 px y menos de 500 KB)
+//   gallery  Id de la galería a la que enlaza (p. ej. 'besamanos-candelaria-jerez-2026')
+//   caption  TEXTO ALTERNATIVO de la imagen (lo leen Google y los lectores de pantalla): descríbela con claridad
 export const featured = [
-  { src: ph(101, 800, 1100), gallery: 'semana-santa-2026', caption: 'Destacada 1 (DEMO)' },
-  { src: ph(102, 800, 1100), gallery: 'semana-santa-2026', caption: 'Destacada 2 (DEMO)' },
-  { src: ph(103, 800, 1100), gallery: 'besamanos-2026', caption: 'Destacada 3 (DEMO)' },
-  { src: ph(104, 800, 1100), gallery: 'cultos-2025', caption: 'Destacada 4 (DEMO)' },
+  // { src: 'sb:2026/besamanos/besamanos-candelaria-jerez/IMG_1685.jpg', gallery: 'besamanos-candelaria-jerez-2026', caption: 'Descripción de la fotografía' },
 ];
