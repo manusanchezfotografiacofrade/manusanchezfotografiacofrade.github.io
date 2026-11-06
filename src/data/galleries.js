@@ -7,8 +7,8 @@
 //   id           Identificador único, sin espacios ni tildes (aparece en la URL: #/galeria/mi-id)
 //   title        Nombre del reportaje
 //   event        Tipo: 'Semana Santa', 'Besamanos', 'Cultos', 'Procesión'... (sirve de filtro)
-//   brotherhood  Hermandad o cofradía
-//   location     Localidad
+//   brotherhood  Hermandad o cofradía. Si no es de una en concreto, déjalo vacío: ''
+//   location     Localidad (también puede ir vacío: '')
 //   date         Fecha 'AAAA-MM-DD'. Si no sabes el día, pon solo el año: 'AAAA' (se mostrará solo el año)
 //   description  Texto breve del reportaje
 //   cover        Portada: ruta de Supabase ('sb:ruta/en/supabase.jpg') o URL completa
@@ -18,6 +18,18 @@
 //                falta listarlas en "images". El nombre debe coincidir EXACTAMENTE con la carpeta del bucket.
 
 export const galleries = [
+  {
+    id: 'sabado-de-pasion-2026',
+    title: 'Sábado de Pasión',
+    event: 'Semana Santa',
+    brotherhood: '', // No es una hermandad en concreto
+    location: 'Jerez de la Frontera', // Confirma o cambia la localidad (puedes dejarla vacía: '')
+    date: '2026', // Pon 'AAAA-MM-DD' cuando quieras mostrar el día exacto
+    description: 'Reportaje fotográfico del Sábado de Pasión, Semana Santa 2026.',
+    cover: 'sb:2026/semana_santa/sabado-pasion/IMG_4925.jpg', // Cambia por la foto que prefieras como portada
+    folder: '2026/semana_santa/sabado-pasion', // Las fotos se leen solas de esta carpeta de Supabase
+    images: [],
+  },
   {
     id: 'veneracion-viacrucis-2026',
     title: 'Veneración Nuestro Padre Jesús de la Via-Crucis',
