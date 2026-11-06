@@ -35,9 +35,11 @@ export const photographer = {
   ],
 };
 
-// Redes sociales. Cada línea es un botón: copia una línea para añadir otra red.
+// Redes sociales. Cada línea es un botón que sale en el inicio, en Contacto y en el pie de página.
+// Copia una línea para añadir otra red. (La línea "Instagram" de la página de Contacto se toma de aquí.)
 export const social = [
   { name: 'Instagram', url: 'https://www.instagram.com/fotografiamanu_/' },
+  { name: 'Canal de WhatsApp', url: 'https://whatsapp.com/channel/0029VbDW1o3DzgTKw9yDZV3o' },
   // { name: 'Facebook', url: 'https://www.facebook.com/tu-usuario' },
   // { name: 'YouTube', url: 'https://www.youtube.com/@tu-usuario' },
 ];
