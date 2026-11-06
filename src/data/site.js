@@ -22,7 +22,8 @@ export const site = {
 export const photographer = {
   name: 'Manu Sánchez',
   photo: 'sb:2026/semana_santa/tu-foto.jpg', // Foto de perfil (Supabase Storage)
-  intro: '[EJEMPLO] Presentación breve del fotógrafo. Sustitúyela por tu propio texto: quién eres y qué te mueve a fotografiar el mundo cofrade.',
+  // Presentación (sale en el inicio y en "Sobre mí"). Edítala cuando quieras.
+  intro: 'Soy Manu Sánchez y fotografío la Semana Santa y la vida de las hermandades de Jerez de la Frontera. Me interesa tanto el recogimiento de un besamanos o una veneración como el ambiente de la calle en días como el Sábado de Pasión. Con mi cámara intento conservar lo que hace especial a este mundo: la fe, el sentimiento y la tradición.',
   passion: '[EJEMPLO] Aquí cuentas tu pasión por la Semana Santa: cómo la vives, qué te emociona y por qué la fotografías.',
   vision: '[EJEMPLO] Aquí explicas tu forma de entender la fotografía cofrade: qué buscas en una imagen, la luz, los gestos, el silencio.',
   // Trayectoria: añade o quita líneas libremente. [EJEMPLO]
