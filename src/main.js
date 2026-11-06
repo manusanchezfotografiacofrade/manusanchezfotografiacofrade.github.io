@@ -48,13 +48,67 @@ const card = (g) => `
     </div>
   </a>`;
 
+// ---------- Portada (carrusel) ----------
+// Fotos de la portada: las de la carpeta de Supabase "site.heroFolder" (se rellena en hydrate());
+// mientras tanto, o si la carpeta está vacía, se usa "site.hero". Con una sola foto no hay carrusel.
+let heroSlides = [site.hero];
+let heroTimer;
+
+const HERO_CSS = `<style>
+.hero>img.sl{opacity:0;transform:scale(1.06);animation:none;transition:opacity 1.4s ease,transform 9s ease-out}
+.hero>img.sl.on{opacity:1;transform:scale(1)}
+.hero .dots{position:absolute;right:clamp(1.25rem,4vw,3rem);bottom:clamp(1.5rem,5vh,3rem);z-index:3;display:flex;gap:.7rem}
+.hero .dot{width:12px;height:12px;border-radius:50%;border:1px solid var(--ink);background:transparent;padding:0;cursor:pointer;opacity:.75;transition:background .3s,border-color .3s,opacity .3s}
+.hero .dot[aria-current=true]{background:var(--gold);border-color:var(--gold);opacity:1}
+</style>`;
+
+const heroMarkup = () =>
+  heroSlides.length > 1
+    ? `${HERO_CSS}
+    ${heroSlides.map((s, i) => (i === 0
+      ? `<img class="sl on" src="${esc(img(s, 1920))}" alt="" fetchpriority="high">`
+      : `<img class="sl" data-src="${esc(img(s, 1920))}" alt="">`)).join('')}
+    <div class="dots">${heroSlides.map((_, i) => `<button class="dot" type="button" aria-label="Ver la foto ${i + 1} de ${heroSlides.length}"${i === 0 ? ' aria-current="true"' : ''}></button>`).join('')}</div>`
+    : `<img src="${esc(img(heroSlides[0], 1920))}" alt="" fetchpriority="high">`;
+
+function startHero() {
+  clearInterval(heroTimer);
+  const hero = $('.hero');
+  if (!hero || heroSlides.length < 2) return;
+  const imgs = [...hero.querySelectorAll('img.sl')];
+  const dots = [...hero.querySelectorAll('.dot')];
+  // Las demás fotos se descargan cuando ya ha cargado la primera (así no frenan la carga de la portada).
+  const loadRest = () => imgs.slice(1).forEach((im) => { if (!im.src) im.src = im.dataset.src; });
+  if (imgs[0].complete) loadRest(); else imgs[0].addEventListener('load', loadRest, { once: true });
+  let i = 0;
+  const go = (n) => {
+    imgs[i].classList.remove('on');
+    dots[i]?.removeAttribute('aria-current');
+    i = (n + imgs.length) % imgs.length;
+    imgs[i].classList.add('on');
+    dots[i]?.setAttribute('aria-current', 'true');
+  };
+  // Si la persona prefiere menos movimiento, no se cambia sola de foto (los puntos siguen funcionando).
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const play = () => {
+    clearInterval(heroTimer);
+    if (still) return;
+    heroTimer = setInterval(() => {
+      if (!document.body.contains(hero)) { clearInterval(heroTimer); return; } // ya no estamos en el inicio
+      if (!document.hidden) go(i + 1);
+    }, 6500);
+  };
+  dots.forEach((d, n) => d.addEventListener('click', () => { go(n); play(); }));
+  play();
+}
+
 // ---------- Páginas ----------
 const homeView = () => ({
   title: site.name,
   desc: `${site.tagline}. Reportajes de Semana Santa, hermandades y cofradías.`,
   html: `
   <section class="hero">
-    <img src="${esc(img(site.hero, 1920))}" alt="" fetchpriority="high">
+    ${heroMarkup()}
     <div class="wrap">
       <p class="eyebrow">Fotografía de Semana Santa</p>
       <h1>${esc(site.name)}</h1>
@@ -78,6 +132,7 @@ const homeView = () => ({
     <div class="grid">${byDate.slice(0, 3).map(card).join('')}</div>
   </div></section>
   <section class="sec alt"><div class="wrap center rv"><p class="eyebrow">Sígueme</p><h2 class="h2">Redes sociales</h2>${socials()}</div></section>`,
+  init: startHero,
 });
 
 // Filtros de la página de galerías: año, hermandad, evento/procesión y localidad.
@@ -417,15 +472,16 @@ function route() {
   render(v, name);
 }
 
-// Si Supabase está conectado, las galerías con "folder" leen sus fotos de esa carpeta.
+// Si Supabase está conectado: las galerías con "folder" leen sus fotos de esa carpeta y la portada
+// lee las suyas de "site.heroFolder".
 async function hydrate() {
   if (!supabaseOn) return;
-  await Promise.all(
-    galleries.filter((g) => g.folder).map(async (g) => {
-      const found = await listFolder(g.folder);
-      if (found.length) { g.images = found; g.cover = g.cover || found[0]; }
-    })
-  );
+  const jobs = galleries.filter((g) => g.folder).map(async (g) => {
+    const found = await listFolder(g.folder);
+    if (found.length) { g.images = found; g.cover = g.cover || found[0]; }
+  });
+  if (site.heroFolder) jobs.push(listFolder(site.heroFolder).then((found) => { if (found.length) heroSlides = found; }));
+  await Promise.all(jobs);
 }
 
 // Imagen de sustitución elegante si alguna fotografía no carga (nunca una imagen rota).
