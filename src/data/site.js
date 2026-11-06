@@ -7,9 +7,10 @@ import { ph } from '../media.js';
 export const site = {
   name: 'Manu Sánchez Fotografía Cofrade',
   tagline: 'Capturando la fe, el sentimiento y la tradición',
-  // Imagen de la portada de inicio. Ahora es un fondo oscuro liso. Para poner una fotografía tuya
-  // pon una ruta de Supabase, p. ej. 'sb:portada/inicio.jpg' (recomendado: unos 2000 px de ancho y menos de 500 KB).
-  hero: ph(900, 1920, 1080, ''),
+  // Imagen de la portada de inicio (Supabase Storage: portada/inicio.jpg, 1920 px, ~400 KB).
+  // Para cambiarla, sube otra foto a la carpeta "portada" desde el panel y pon aquí su ruta,
+  // p. ej. 'sb:portada/otra-foto.jpg'. Recomendado: horizontal (16:9), unos 1920 px y menos de 500 KB.
+  hero: 'sb:portada/inicio.jpg',
 
   // Datos que se muestran en la página de Contacto. Son solo texto visible: el correo donde RECIBES
   // los avisos del formulario se configura en Supabase (secreto CONTACT_TO_EMAIL, ver README), no aquí.
