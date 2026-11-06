@@ -26,8 +26,12 @@ const app = $('#app');
 const pic = (src, alt, w = 900) =>
   `<img src="${esc(img(src, w))}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
 
+// Hermandad y localidad son opcionales: si una galería no los tiene (''), simplemente no se muestran.
+const where = (g) => [g.brotherhood, g.location].filter(Boolean).join(', ');
+const info = (g) => [g.brotherhood, g.location, `${g.images.length} fotografías`].filter(Boolean).join(' · ');
+
 // Texto alternativo descriptivo de una fotografía de galería
-const photoAlt = (g, i) => `${g.title} (${g.brotherhood}, ${g.location}): fotografía ${i + 1} de ${g.images.length}`;
+const photoAlt = (g, i) => `${g.title}${where(g) ? ` (${where(g)})` : ''}: fotografía ${i + 1} de ${g.images.length}`;
 
 const socials = () =>
   `<div class="soc">${social
@@ -40,7 +44,7 @@ const card = (g) => `
     <div class="tx">
       <p class="eyebrow">${esc(g.event)} · ${year(g)}</p>
       <h3>${esc(g.title)}</h3>
-      <p class="meta">${esc(g.brotherhood)} · ${esc(g.location)} · ${g.images.length} fotografías</p>
+      <p class="meta">${esc(info(g))}</p>
     </div>
   </a>`;
 
@@ -96,6 +100,7 @@ const galleriesView = () => ({
           `<select data-k="${k}" aria-label="Filtrar por ${label.toLowerCase()}"><option value="">${label}: todos</option>${[
             ...new Set(galleries.map(f)),
           ]
+            .filter(Boolean)
             .sort()
             .map((v) => `<option>${esc(v)}</option>`)
             .join('')}</select>`
@@ -132,7 +137,7 @@ const galleryView = (id) => {
       <a class="meta" href="#/galerias">← Todas las galerías</a>
       <p class="eyebrow" style="margin-top:1.6rem">${esc(g.event)} · ${fmt(g.date)}</p>
       <h1 class="h2">${esc(g.title)}</h1>
-      <p class="meta">${esc(g.brotherhood)} · ${esc(g.location)} · ${g.images.length} fotografías</p>
+      <p class="meta">${esc(info(g))}</p>
       <p class="desc">${esc(g.description)}</p>
       ${
         g.images.length
