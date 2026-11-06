@@ -24,13 +24,13 @@ export const photographer = {
   photo: 'sb:2026/semana_santa/tu-foto.jpg', // Foto de perfil (Supabase Storage)
   // Presentación (sale en el inicio y en "Sobre mí"). Edítala cuando quieras.
   intro: 'Soy Manu Sánchez y fotografío la Semana Santa y la vida de las hermandades de Jerez de la Frontera. Me interesa tanto el recogimiento de un besamanos o una veneración como el ambiente de la calle en días como el Sábado de Pasión. Con mi cámara intento conservar lo que hace especial a este mundo: la fe, el sentimiento y la tradición.',
-  passion: '[EJEMPLO] Aquí cuentas tu pasión por la Semana Santa: cómo la vives, qué te emociona y por qué la fotografías.',
+  // Sección "Mi pasión por la Semana Santa"
+  passion: 'La Semana Santa se vive con todos los sentidos: el olor a cera y a incienso, el sonido de una marcha que se acerca, el silencio de una iglesia antes de que se abran sus puertas. Me apasiona estar cerca de todo eso, tanto en la calle como en el recogimiento de un besamanos, y fijarme en lo que cuentan un rostro, unas manos o un pequeño gesto de devoción de quienes hacen posible cada hermandad.',
   vision: '[EJEMPLO] Aquí explicas tu forma de entender la fotografía cofrade: qué buscas en una imagen, la luz, los gestos, el silencio.',
-  // Trayectoria: añade o quita líneas libremente. [EJEMPLO]
+  // Trayectoria: mientras la lista esté vacía, la sección NO se muestra en "Sobre mí".
+  // Para añadirla, quita las // y cambia los datos (puedes poner todas las líneas que quieras):
   journey: [
-    { year: 'Año', text: '[EJEMPLO] Hito de tu trayectoria fotográfica.' },
-    { year: 'Año', text: '[EJEMPLO] Otro hito: una exposición, una colaboración, una publicación...' },
-    { year: 'Año', text: '[EJEMPLO] Actualidad.' },
+    // { year: '2026', text: 'Descripción del hito de tu trayectoria.' },
   ],
 };
 
