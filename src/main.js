@@ -170,9 +170,13 @@ const aboutView = () => ({
     </div>
     <div class="blk rv"><h2>Mi pasión por la Semana Santa</h2><p class="desc">${esc(photographer.passion)}</p></div>
     <div class="blk rv"><h2>Mi forma de entender la fotografía cofrade</h2><p class="desc">${esc(photographer.vision)}</p></div>
-    <div class="blk rv"><h2>Trayectoria</h2>${photographer.journey
-      .map((j) => `<div class="line"><b>${esc(j.year)}</b>${esc(j.text)}</div>`)
-      .join('')}</div>
+    ${
+      photographer.journey?.length
+        ? `<div class="blk rv"><h2>Trayectoria</h2>${photographer.journey
+            .map((j) => `<div class="line"><b>${esc(j.year)}</b>${esc(j.text)}</div>`)
+            .join('')}</div>`
+        : ''
+    }
   </div></section>`,
 });
 
