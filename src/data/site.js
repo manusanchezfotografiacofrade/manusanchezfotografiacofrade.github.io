@@ -7,9 +7,15 @@ import { ph } from '../media.js';
 export const site = {
   name: 'Manu Sánchez Fotografía Cofrade',
   tagline: 'Capturando la fe, el sentimiento y la tradición',
-  // Imagen de la portada de inicio (Supabase Storage: portada/inicio.jpg, 1920 px, ~400 KB).
-  // Para cambiarla, sube otra foto a la carpeta "portada" desde el panel y pon aquí su ruta,
-  // p. ej. 'sb:portada/otra-foto.jpg'. Recomendado: horizontal (16:9), unos 1920 px y menos de 500 KB.
+
+  // PORTADA DE INICIO (carrusel). La web muestra, una tras otra, TODAS las fotos que haya en esta
+  // carpeta de Supabase Storage. Para añadir o quitar fotos del carrusel, súbelas o bórralas en la
+  // carpeta "portada" desde el panel (#/admin > Fotografías). Se ordenan por nombre de archivo: si
+  // quieres controlar el orden, nómbralas 01-nombre.jpg, 02-nombre.jpg, etc.
+  // Con UNA sola foto no hay carrusel y se ve fija. Fotos recomendadas: horizontales (16:9),
+  // sin marca de agua, de unos 1920 px de ancho y menos de 500 KB cada una.
+  heroFolder: 'portada',
+  // Foto de respaldo si la carpeta está vacía o Supabase no responde.
   hero: 'sb:portada/inicio.jpg',
 
   // Datos que se muestran en la página de Contacto. Son solo texto visible: el correo donde RECIBES
