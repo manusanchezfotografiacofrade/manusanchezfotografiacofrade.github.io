@@ -10,7 +10,8 @@
 //   brotherhood  Hermandad o cofradía. Si no es de una en concreto, déjalo vacío: ''
 //   location     Localidad (también puede ir vacío: '')
 //   date         Fecha 'AAAA-MM-DD'. Si no sabes el día, pon solo el año: 'AAAA' (se mostrará solo el año).
-//                Las galerías se ordenan de la más reciente a la más antigua según esta fecha.
+//                Las galerías se ordenan de la más reciente a la más antigua según esta fecha
+//                (si dos tienen la misma fecha, se respeta el orden en que están escritas aquí).
 //   description  Texto breve del reportaje
 //   cover        Portada: ruta de Supabase ('sb:ruta/en/supabase.jpg') o URL completa
 //   images       Lista de fotografías (mismos formatos que cover). Déjala vacía si usas "folder"
@@ -57,6 +58,19 @@ export const galleries = [
     description: 'Reportaje fotográfico del Viernes Santo, Semana Santa 2026.',
     cover: 'sb:2026/semana_santa/viernes-santo/IMG_6697.jpg',
     folder: '2026/semana_santa/viernes-santo',
+    images: [],
+  },
+  {
+    id: 'noche-de-jesus-2026',
+    title: 'Noche de Jesús',
+    event: 'Semana Santa',
+    brotherhood: '',
+    location: 'Jerez de la Frontera',
+    date: '2026-04-03', // Madrugada del Jueves Santo al Viernes Santo (va entre el Jueves Santo y el Viernes Santo)
+    description: 'Galería de la Noche de Jesús, la madrugada del Jueves Santo al Viernes Santo, Semana Santa 2026. Próximamente.',
+    cover: '', // Sin portada mientras sea "próximamente"; al subir fotos se usa la primera
+    folder: '2026/semana_santa/noche-jesus',
+    soon: true, // Se muestra como "Próximamente" hasta que haya fotos en su carpeta
     images: [],
   },
   {
@@ -117,19 +131,6 @@ export const galleries = [
     description: 'Reportaje fotográfico del Sábado de Pasión, Semana Santa 2026.',
     cover: 'sb:2026/semana_santa/sabado-pasion/IMG_4925.jpg',
     folder: '2026/semana_santa/sabado-pasion',
-    images: [],
-  },
-  {
-    id: 'noche-de-jesus-2026',
-    title: 'Noche de Jesús',
-    event: 'Semana Santa',
-    brotherhood: '',
-    location: 'Jerez de la Frontera',
-    date: '2026', // Pon 'AAAA-MM-DD' cuando quieras mostrar el día exacto
-    description: 'Galería de la Noche de Jesús, Semana Santa 2026. Próximamente.',
-    cover: '', // Sin portada mientras sea "próximamente"; al subir fotos se usa la primera
-    folder: '2026/semana_santa/noche-jesus',
-    soon: true, // Se muestra como "Próximamente" hasta que haya fotos en su carpeta
     images: [],
   },
   {
