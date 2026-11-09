@@ -28,7 +28,12 @@ const pic = (src, alt, w = 900) =>
 
 // Hermandad y localidad son opcionales: si una galería no los tiene (''), simplemente no se muestran.
 const where = (g) => [g.brotherhood, g.location].filter(Boolean).join(', ');
-const info = (g) => [g.brotherhood, g.location, `${g.images.length} fotografías`].filter(Boolean).join(' · ');
+// "Próximamente": una galería con soon:true y sin fotos. En cuanto tenga fotos en su carpeta, deja de serlo sola.
+const isSoon = (g) => g.soon && !g.images.length;
+const info = (g) => [g.brotherhood, g.location, isSoon(g) ? 'Próximamente' : `${g.images.length} fotografías`].filter(Boolean).join(' · ');
+const coverOf = (g) => g.cover || (g.soon ? ph(7, 1200, 800, '') : '');
+const SOON =
+  '<span style="position:absolute;top:1rem;left:1rem;z-index:2;background:rgba(11,10,9,.88);border:1px solid var(--gold);color:var(--gold);padding:.3rem .85rem;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase">Próximamente</span>';
 
 // Texto alternativo descriptivo de una fotografía de galería
 const photoAlt = (g, i) => `${g.title}${where(g) ? ` (${where(g)})` : ''}: fotografía ${i + 1} de ${g.images.length}`;
@@ -40,7 +45,7 @@ const socials = () =>
 
 const card = (g) => `
   <a class="card rv" href="#/galeria/${esc(g.id)}">
-    <div class="im">${pic(g.cover, `Portada de la galería ${g.title}`, 700)}</div>
+    <div class="im" style="position:relative">${isSoon(g) ? SOON : ''}${pic(coverOf(g), `Portada de la galería ${g.title}`, 700)}</div>
     <div class="tx">
       <p class="eyebrow">${esc(g.event)} · ${year(g)}</p>
       <h3>${esc(g.title)}</h3>
@@ -202,7 +207,9 @@ const galleryView = (id) => {
                   `<button class="rv" data-i="${i}" aria-label="Ampliar fotografía ${i + 1} de ${g.images.length}">${pic(s, photoAlt(g, i), 700)}</button>`
               )
               .join('')}</div>`
-          : '<p class="meta">Esta galería todavía no tiene fotografías.</p>'
+          : isSoon(g)
+            ? '<p style="color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-size:.85rem">Próximamente. Esta galería estará disponible en breve.</p>'
+            : '<p class="meta">Esta galería todavía no tiene fotografías.</p>'
       }
     </div></section>`,
     init() {
@@ -472,13 +479,13 @@ function route() {
   render(v, name);
 }
 
-// Si Supabase está conectado: las galerías con "folder" leen sus fotos de esa carpeta y la portada
-// lee las suyas de "site.heroFolder".
+// Si Supabase está conectado: las galerías con "folder" leen sus fotos de esa carpeta (y, si tienen
+// fotos, dejan de estar "próximamente") y la portada lee las suyas de "site.heroFolder".
 async function hydrate() {
   if (!supabaseOn) return;
   const jobs = galleries.filter((g) => g.folder).map(async (g) => {
     const found = await listFolder(g.folder);
-    if (found.length) { g.images = found; g.cover = g.cover || found[0]; }
+    if (found.length) { g.images = found; g.cover = g.cover || found[0]; g.soon = false; }
   });
   if (site.heroFolder) jobs.push(listFolder(site.heroFolder).then((found) => { if (found.length) heroSlides = found; }));
   await Promise.all(jobs);
