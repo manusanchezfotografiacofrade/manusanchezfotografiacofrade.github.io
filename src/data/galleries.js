@@ -21,7 +21,8 @@
 //   soon         OPCIONAL. true = la galería se muestra como "Próximamente" (sin fotos). En cuanto
 //                subas fotos a su carpeta, deja de estar "próximamente" sola; no hace falta cambiar nada.
 //
-// Las fechas de los días de Semana Santa 2026 siguen el calendario litúrgico (Domingo de Resurrección: 5 de abril).
+// Las fechas de la Cuaresma y la Semana Santa 2026 siguen el calendario litúrgico
+// (Miércoles de Ceniza: 18 de febrero; Domingo de Resurrección: 5 de abril).
 
 export const galleries = [
   {
@@ -131,6 +132,18 @@ export const galleries = [
     description: 'Reportaje fotográfico del Sábado de Pasión, Semana Santa 2026.',
     cover: 'sb:2026/semana_santa/sabado-pasion/IMG_4925.jpg',
     folder: '2026/semana_santa/sabado-pasion',
+    images: [],
+  },
+  {
+    id: 'primer-domingo-cuaresma-2026',
+    title: 'Primer Domingo de Cuaresma',
+    event: 'Cuaresma - Besamanos',
+    brotherhood: '', // Sin hermandad en concreto
+    location: 'Jerez de la Frontera',
+    date: '2026-02-22',
+    description: 'Reportaje fotográfico del Primer Domingo de Cuaresma, besamanos 2026.',
+    cover: 'sb:2026/besamanos/primer-domingo-cuaresma/IMG_2256.jpg', // Cambia por la foto que prefieras como portada
+    folder: '2026/besamanos/primer-domingo-cuaresma',
     images: [],
   },
   {
