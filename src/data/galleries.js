@@ -135,6 +135,18 @@ export const galleries = [
     images: [],
   },
   {
+    id: 'segundo-domingo-cuaresma-2026',
+    title: 'Segundo Domingo de Cuaresma',
+    event: 'Cuaresma - Besamanos',
+    brotherhood: '', // Sin hermandad en concreto
+    location: 'Jerez de la Frontera',
+    date: '2026-03-01',
+    description: 'Reportaje fotográfico del Segundo Domingo de Cuaresma, besamanos 2026.',
+    cover: 'sb:2026/besamanos/segundo-domingo-cuaresma/IMG_2520.jpg', // Cambia por la foto que prefieras como portada
+    folder: '2026/besamanos/segundo-domingo-cuaresma',
+    images: [],
+  },
+  {
     id: 'primer-domingo-cuaresma-2026',
     title: 'Primer Domingo de Cuaresma',
     event: 'Cuaresma - Besamanos',
