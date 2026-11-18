@@ -22,7 +22,63 @@ const fmt = (d) =>
 const byDate = [...galleries].sort((a, b) => b.date.localeCompare(a.date));
 const app = $('#app');
 
-// Imagen con carga diferida. Si falla, el listener global muestra una imagen de sustitución.
+// ---------- Carga de imágenes: pocas a la vez y con reintentos ----------
+// Supabase rechaza con error 429 las ráfagas de muchas peticiones seguidas. Por eso las miniaturas de
+// las galerías se descargan de 4 en 4 (cola) y, si alguna falla, se reintenta con espera creciente antes
+// de mostrar el aviso "Fotografía no disponible". El resto de imágenes también reintenta si falla.
+const RETRY = [900, 2200, 4500, 8000]; // esperas (ms) antes de cada reintento
+const MAX_PARALLEL = 4;
+const FALLBACK = () => ph(0, 1200, 800, 'Fotografía no disponible');
+const bust = (url, n) => (n ? `${url}${url.includes('?') ? '&' : '?'}r=${n}` : url);
+const queue = [];
+let active = 0;
+
+function pump() {
+  while (active < MAX_PARALLEL && queue.length) {
+    const { im, n } = queue.shift();
+    if (!im.isConnected) continue; // ya no está en pantalla (se cambió de página)
+    active += 1;
+    fetchImg(im, n);
+  }
+}
+
+function fetchImg(im, n) {
+  let settled = false;
+  const finish = (ok) => {
+    if (settled) return;
+    settled = true;
+    clearTimeout(watchdog);
+    im.removeEventListener('load', onLoad);
+    im.removeEventListener('error', onError);
+    active -= 1;
+    if (ok) {
+      im.alt = im.dataset.alt || '';
+      if (im.parentElement) im.parentElement.style.aspectRatio = ''; // ya manda la proporción real de la foto
+    } else if (n < RETRY.length) {
+      setTimeout(() => { queue.unshift({ im, n: n + 1 }); pump(); }, RETRY[n] + Math.random() * 500);
+    } else {
+      im.alt = im.dataset.alt || '';
+      im.src = FALLBACK();
+    }
+    pump();
+  };
+  const onLoad = () => finish(true);
+  const onError = () => finish(false);
+  const watchdog = setTimeout(onError, 20000); // por si una petición se queda colgada
+  im.addEventListener('load', onLoad);
+  im.addEventListener('error', onError);
+  im.src = bust(im.dataset.src, n);
+}
+
+function enqueue(root) {
+  root.querySelectorAll('img[data-q]:not([data-queued])').forEach((im) => {
+    im.dataset.queued = '1';
+    queue.push({ im, n: 0 });
+  });
+  pump();
+}
+
+// Imagen con carga diferida. Si falla, se reintenta y, como último recurso, se muestra una imagen de sustitución.
 const pic = (src, alt, w = 900) =>
   `<img src="${esc(img(src, w))}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
 
@@ -180,6 +236,11 @@ const galleriesView = () => ({
   },
 });
 
+// Las fotos de una galería se dibujan por tandas (PAGE) según se baja, y se descargan en cola de 4 en 4.
+const PAGE = 24;
+const thumb = (g, i) =>
+  `<button class="rv" data-i="${i}" style="aspect-ratio:3/2" aria-label="Ampliar fotografía ${i + 1} de ${g.images.length}"><img data-q="1" data-src="${esc(img(g.images[i], 700))}" data-alt="${esc(photoAlt(g, i))}" alt="" decoding="async"></button>`;
+
 const galleryView = (id) => {
   const g = galleries.find((x) => x.id === id);
   if (!g) {
@@ -201,22 +262,40 @@ const galleryView = (id) => {
       <p class="desc">${esc(g.description)}</p>
       ${
         g.images.length
-          ? `<div class="masonry">${g.images
-              .map(
-                (s, i) =>
-                  `<button class="rv" data-i="${i}" aria-label="Ampliar fotografía ${i + 1} de ${g.images.length}">${pic(s, photoAlt(g, i), 700)}</button>`
-              )
-              .join('')}</div>`
+          ? `<div class="masonry" id="mas">${g.images.slice(0, PAGE).map((_, i) => thumb(g, i)).join('')}</div>${
+              g.images.length > PAGE ? '<div id="more" style="height:1px"></div>' : ''
+            }`
           : isSoon(g)
             ? '<p style="color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-size:.85rem">Próximamente. Esta galería estará disponible en breve.</p>'
             : '<p class="meta">Esta galería todavía no tiene fotografías.</p>'
       }
     </div></section>`,
     init() {
-      $('.masonry')?.addEventListener('click', (e) => {
+      const mas = $('#mas');
+      if (!mas) return;
+      mas.addEventListener('click', (e) => {
         const b = e.target.closest('button');
         if (b) openLb(g, Number(b.dataset.i));
       });
+      enqueue(mas);
+      const more = $('#more');
+      if (!more) return;
+      let shown = PAGE;
+      const obs = new IntersectionObserver(
+        (es) => {
+          if (!es.some((x) => x.isIntersecting)) return;
+          const next = Math.min(shown + PAGE, g.images.length);
+          let html = '';
+          for (let i = shown; i < next; i += 1) html += thumb(g, i);
+          mas.insertAdjacentHTML('beforeend', html);
+          shown = next;
+          enqueue(mas);
+          reveal();
+          if (shown >= g.images.length) { obs.disconnect(); more.remove(); }
+        },
+        { rootMargin: '800px 0px' }
+      );
+      obs.observe(more);
     },
   };
 };
@@ -387,6 +466,9 @@ function buildLb() {
 function show() {
   const { g, i } = cur;
   const im = $('img', lb);
+  delete im.dataset.try; // reinicia los reintentos de la foto anterior
+  delete im.dataset.orig;
+  delete im.dataset.fb;
   im.src = img(g.images[i], 1800);
   im.alt = photoAlt(g, i);
   $('.cap', lb).textContent = `${g.title} · ${i + 1} / ${g.images.length}`;
@@ -491,13 +573,22 @@ async function hydrate() {
   await Promise.all(jobs);
 }
 
-// Imagen de sustitución elegante si alguna fotografía no carga (nunca una imagen rota).
+// Si una imagen (que no sea miniatura de galería: esas las gestiona la cola) falla, se reintenta con
+// espera creciente; solo si sigue fallando se muestra la imagen de sustitución (nunca una imagen rota).
 document.addEventListener('error', (e) => {
   const t = e.target;
-  if (t.tagName === 'IMG' && !t.dataset.fb) {
-    t.dataset.fb = '1';
-    t.src = ph(0, 1200, 800, 'Fotografía no disponible');
+  if (t.tagName !== 'IMG' || t.dataset.q || t.dataset.fb) return;
+  const n = Number(t.dataset.try || 0);
+  const failing = t.src;
+  if (n < RETRY.length && !failing.startsWith('data:')) {
+    t.dataset.try = String(n + 1);
+    if (!t.dataset.orig) t.dataset.orig = failing.replace(/[?&]r=\d+$/, '');
+    const base = t.dataset.orig;
+    setTimeout(() => { if (t.isConnected && t.src === failing) t.src = bust(base, n + 1); }, RETRY[n] + Math.random() * 500);
+    return;
   }
+  t.dataset.fb = '1';
+  t.src = FALLBACK();
 }, true);
 
 layout();
