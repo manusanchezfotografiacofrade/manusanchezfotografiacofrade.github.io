@@ -1,6 +1,7 @@
 import './style.css';
 import { site, photographer, social, featured } from './data/site.js';
 import { galleries } from './data/galleries.js';
+import { carteles } from './data/carteles.js';
 import { img, ph, listFolder, supabaseOn } from './media.js';
 
 // Conexión pública con Supabase (URL y clave "anon": son públicas por diseño). Se definen en las
@@ -91,8 +92,8 @@ const coverOf = (g) => g.cover || (g.soon ? ph(7, 1200, 800, '') : '');
 const SOON =
   '<span style="position:absolute;top:1rem;left:1rem;z-index:2;background:rgba(11,10,9,.88);border:1px solid var(--gold);color:var(--gold);padding:.3rem .85rem;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase">Próximamente</span>';
 
-// Texto alternativo descriptivo de una fotografía de galería
-const photoAlt = (g, i) => `${g.title}${where(g) ? ` (${where(g)})` : ''}: fotografía ${i + 1} de ${g.images.length}`;
+// Texto alternativo descriptivo de una fotografía de galería (o de un cartel, que trae su propio texto en "alts")
+const photoAlt = (g, i) => g.alts?.[i] ?? `${g.title}${where(g) ? ` (${where(g)})` : ''}: fotografía ${i + 1} de ${g.images.length}`;
 
 const socials = () =>
   `<div class="soc">${social
@@ -300,6 +301,42 @@ const galleryView = (id) => {
   };
 };
 
+// Página "Carteles": cada cartel se ve completo (sin recortar) y se amplía al pulsarlo, con el visor de fotos.
+// Para el visor se monta una "galería" con los carteles: el título de cada uno sirve de texto alternativo y de pie.
+const cartelesSet = () => ({
+  title: 'Carteles',
+  brotherhood: '',
+  location: '',
+  images: carteles.map((c) => c.image),
+  alts: carteles.map((c) => c.title),
+  caps: carteles.map((c) => c.title),
+});
+
+const cartelesView = () => ({
+  title: 'Carteles',
+  desc: 'Carteles y diseños de Manu Sánchez: papeletas de sitio y carteles oficiales de la Semana Santa.',
+  html: `
+  <section class="pg"><div class="wrap">
+    <p class="eyebrow">Diseño y fotografía</p><h1 class="h2">Carteles</h1>
+    ${
+      carteles.length
+        ? `<div class="grid" id="cart">${carteles
+            .map(
+              (c, i) =>
+                `<button type="button" class="card rv" data-i="${i}" style="padding:0;border:0;width:100%;text-align:left;cursor:zoom-in;color:inherit;font:inherit" aria-label="Ampliar: ${esc(c.title)}">${pic(c.image, c.title, 900)}<div class="tx"><h3 style="font-size:1.2rem;line-height:1.35">${esc(c.title)}</h3></div></button>`
+            )
+            .join('')}</div>`
+        : '<p class="meta">Próximamente.</p>'
+    }
+  </div></section>`,
+  init() {
+    $('#cart')?.addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (b) openLb(cartelesSet(), Number(b.dataset.i));
+    });
+  },
+});
+
 const aboutView = () => ({
   title: 'Sobre mí',
   desc: 'Conoce al fotógrafo: su pasión por la Semana Santa y su forma de entender la fotografía cofrade.',
@@ -471,7 +508,7 @@ function show() {
   delete im.dataset.fb;
   im.src = img(g.images[i], 1800);
   im.alt = photoAlt(g, i);
-  $('.cap', lb).textContent = `${g.title} · ${i + 1} / ${g.images.length}`;
+  $('.cap', lb).textContent = `${g.caps?.[i] ?? g.title} · ${i + 1} / ${g.images.length}`;
   [i - 1, i + 1].forEach((n) => { if (g.images[n]) new Image().src = img(g.images[n], 1800); });
 }
 const step = (d) => { cur.i = (cur.i + d + cur.g.images.length) % cur.g.images.length; show(); };
@@ -500,8 +537,8 @@ function reveal() {
   document.querySelectorAll('.rv:not(.in)').forEach((el) => io.observe(el));
 }
 
-// ---------- Estructura común y rutas (#/galerias, #/galeria/id, #/sobre-mi, #/contacto, #/admin) ----------
-const NAV = [['', 'Inicio'], ['galerias', 'Galerías'], ['sobre-mi', 'Sobre mí'], ['contacto', 'Contacto']];
+// ---------- Estructura común y rutas (#/galerias, #/galeria/id, #/carteles, #/sobre-mi, #/contacto, #/admin) ----------
+const NAV = [['', 'Inicio'], ['galerias', 'Galerías'], ['carteles', 'Carteles'], ['sobre-mi', 'Sobre mí'], ['contacto', 'Contacto']];
 
 function layout() {
   document.body.insertAdjacentHTML(
@@ -525,7 +562,7 @@ function layout() {
   addEventListener('scroll', () => hd.classList.toggle('solid', scrollY > 40), { passive: true });
 }
 
-const ROUTES = { __proto__: null, galerias: galleriesView, 'sobre-mi': aboutView, contacto: contactView };
+const ROUTES = { __proto__: null, galerias: galleriesView, carteles: cartelesView, 'sobre-mi': aboutView, contacto: contactView };
 
 function render(v, name) {
   app.innerHTML = v.html;
